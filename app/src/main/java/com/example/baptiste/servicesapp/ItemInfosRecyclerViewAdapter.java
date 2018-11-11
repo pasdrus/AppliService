@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.baptiste.servicesapp.ItemFragment.OnListFragmentInteractionListener;
+import com.example.baptiste.servicesapp.ItemInfosFragment.OnListFragmentInteractionListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,39 +18,38 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<ServicesContent.ServicesItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfosRecyclerViewAdapter.ViewHolder> {
 
-    public MyItemRecyclerViewAdapter(List<ServicesContent.ServicesItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    private final List<ServicesInfos.ServicesItemInfos> mValues1;
+    private final OnListFragmentInteractionListener mListener1;
+
+    public ItemInfosRecyclerViewAdapter(List<ServicesInfos.ServicesItemInfos> items, OnListFragmentInteractionListener listener) {
+        mValues1 = items;
+        mListener1 = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item, parent, false);
+                .inflate(R.layout.fragment_item_infos, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        //holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).title);
-        //holder.mImageView.setImageDrawable(mValues.get(position).image);
-        Picasso.get().load(mValues.get(position).urlImage).into(holder.mImageView);
 
+
+        holder.mContentView.setText(mValues1.get(position).firstValue);
+        holder.mContentTestView.setText(mValues1.get(position).section);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
+                if (null != mListener1) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener1.onListFragmentInteraction(holder.mItem);
                 }
             }
         });
@@ -58,23 +57,20 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mValues1.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        //public final TextView mIdView;
         public final TextView mContentView;
-        public final ImageView mImageView;
-        public ServicesContent.ServicesItem mItem;
+        public final TextView mContentTestView;
+        public ServicesInfos.ServicesItemInfos mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            //mIdView = (TextView) view.findViewById(R.id.item_number);
             mContentView = (TextView) view.findViewById(R.id.content);
-            mImageView = (ImageView) view.findViewById(R.id.image);
-
+            mContentTestView = (TextView) view.findViewById(R.id.textTest);
         }
 
         @Override

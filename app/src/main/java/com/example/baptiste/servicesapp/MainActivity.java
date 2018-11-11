@@ -1,6 +1,7 @@
 package com.example.baptiste.servicesapp;
 
 import android.app.ActionBar;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.icu.text.IDNA;
+import android.net.sip.SipSession;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +37,9 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
     static Context tcontext;
+    DialogInterface.OnClickListener listener;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +58,22 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.myactionbar,menu);
         return true;
+
     }
 
 
 
+    //Méthode appellée dans myactionbar
+    //Important de mettre MenuItem au lieu de menu car c'est le bouton d'un menu? en tout cas
+    //ne marche pas juste avec menu
+    public void popupInfos(MenuItem menuItem)
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Ceci est un test");
+        alertDialogBuilder.setPositiveButton("OK", listener);
+        alertDialogBuilder.show();
 
+    }
 
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -81,7 +98,11 @@ public class MainActivity extends AppCompatActivity {
 
         }catch (IOException e){e.printStackTrace();}
         return json;
+
     }
+
+
+
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
         private static int NUM_ITEMS = 4;
@@ -105,7 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 case 1: // Fragment # 0 - This will show FirstFragment different title
                     return FirstFragment.newInstance(1, "Page # 2");
                 case 2: // Fragment # 1 - This will show SecondFragment
-                    return SecondFragment.newInstance(2, "Page # 3");
+                    return ItemInfosFragment.newInstance(1);
+                    //return ItemFragment.newInstance(1);
                 case 3: // Fragment # 1 - This will show SecondFragment
                     return Fuck.newInstance(1);
                 case 4: // Fragment # 1 - This will show SecondFragment

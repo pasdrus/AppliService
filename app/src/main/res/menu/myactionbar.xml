@@ -6,5 +6,6 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
     android:title=""
     app:showAsAction="always"
     android:icon="@drawable/interrogation"
+    android:onClick="popupInfos"
     />
 </menu>
