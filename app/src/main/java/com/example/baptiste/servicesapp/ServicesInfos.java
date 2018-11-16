@@ -19,9 +19,10 @@ public class ServicesInfos {
         ITEM_MAP.put(item.id, item);
     }
 
-    private static ServicesItemInfos createServicesItem(int position, String section,String type,String firstValue) {
-        return new ServicesItemInfos(String.valueOf(position),"Section : " + section,"Type : " +type,"firstValue : " +firstValue);
+    private static ServicesItemInfos createServicesItem(int position, String section,String type,String firstValue,String serviceString) {
+        return new ServicesItemInfos(String.valueOf(position),section,type,firstValue,serviceString);
     }
+
 
     static {
         // Add some sample items.
@@ -37,7 +38,10 @@ public class ServicesInfos {
 
                 JSONArray service = obj.getJSONArray("services");
 
+
                 JSONObject serviceName = service.getJSONObject(i);
+
+                String serviceNameString = serviceName.getString("title");
 
                 JSONArray ServiceArray = serviceName.getJSONArray("elements");
 
@@ -48,7 +52,7 @@ public class ServicesInfos {
                     JSONArray tableauValue = ServiceArrayObject.getJSONArray("value");
                     String firstValue = tableauValue.getString(0);
 
-                    addItem(createServicesItem(i+1,section,type,firstValue));
+                    addItem(createServicesItem(i+1,section,type,firstValue,serviceNameString));
                 }
 
 
@@ -62,12 +66,14 @@ public class ServicesInfos {
         public final String section;
         public final String type;
         public final String firstValue;
+        public final String serviceString;
 
-        public ServicesItemInfos(String id,String section,String type,String firstValue) {
+        public ServicesItemInfos(String id,String section,String type,String firstValue,String serviceString) {
             this.id = id;
             this.section = section;
             this.type = type;
             this.firstValue = firstValue;
+            this.serviceString = serviceString;
         }
     }
 }

@@ -1,16 +1,10 @@
 package com.example.baptiste.servicesapp;
 
-import android.app.ActionBar;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.icu.text.IDNA;
-import android.net.sip.SipSession;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -18,26 +12,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
     static Context tcontext;
     DialogInterface.OnClickListener listener;
+    static ViewPager sViewPager;
+    //static SharedPreferences.Editor editor;
 
 
 
@@ -50,13 +35,25 @@ public class MainActivity extends AppCompatActivity {
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
         vpPager.setAdapter(adapterViewPager);
         tcontext = getApplicationContext();
+        sViewPager = findViewById(R.id.vpPager);
+
+        SharedPreferences.Editor editor = getSharedPreferences("Preferences",0).edit();
+        editor.apply();
 
 
 
     }
 
+    public static void setCurrentItem(int item, boolean smoothScroll) {
+        sViewPager.setCurrentItem(item, smoothScroll);
+
+    }
+
+
+
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.myactionbar,menu);
+
         return true;
 
     }
@@ -68,8 +65,11 @@ public class MainActivity extends AppCompatActivity {
     //ne marche pas juste avec menu
     public void popupInfos(MenuItem menuItem)
     {
+        SharedPreferences prefs = getSharedPreferences("Preferences", 0);
+        String restoredText = prefs.getString("Service", null);
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Ceci est un test");
+        alertDialogBuilder.setMessage("Ceci est un test" + restoredText);
         alertDialogBuilder.setPositiveButton("OK", listener);
         alertDialogBuilder.show();
 
@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
             return NUM_ITEMS;
         }
 
+
         // Returns the fragment to display for that page
         @Override
         public Fragment getItem(int position) {
@@ -124,9 +125,11 @@ public class MainActivity extends AppCompatActivity {
                 case 0: // Fragment # 0 - This will show FirstFragment
                     return ItemFragment.newInstance(1);
                 case 1: // Fragment # 0 - This will show FirstFragment different title
-                    return FirstFragment.newInstance(1, "Page # 2");
-                case 2: // Fragment # 1 - This will show SecondFragment
                     return ItemInfosFragment.newInstance(1);
+                    //return FirstFragment.newInstance(1, "Page # 2");
+                case 2: // Fragment # 1 - This will show SecondFragment
+                    //return FirstFragment.newInstance(1, "Page # 2");
+                    return Fuck.newInstance(1);
                     //return ItemFragment.newInstance(1);
                 case 3: // Fragment # 1 - This will show SecondFragment
                     return Fuck.newInstance(1);

@@ -72,8 +72,8 @@ public class ItemInfosFragment extends Fragment {
         return view;
     }
 
-/*
-    @Override
+
+ /*   @Override
    public void onAttach(Context context) {
         super.onAttach(context);
 

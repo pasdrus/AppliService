@@ -20,7 +20,7 @@ public class ServicesContent {
     }
 
     private static ServicesItem createServicesItem(int position, String service,String urlImage) {
-        return new ServicesItem(String.valueOf(position),"Service : " + service,urlImage);
+        return new ServicesItem(String.valueOf(position),service,urlImage);
     }
 
     static {
