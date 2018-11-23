@@ -3,6 +3,7 @@ package com.example.baptiste.servicesapp;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +23,9 @@ public class ItemInfosFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener1;
+    private OnListFragmentInteractionListener mListener;
+
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -51,6 +54,13 @@ public class ItemInfosFragment extends Fragment {
         }
 
 
+
+    }
+
+
+    public void refresh(){
+        FragmentTransaction ft1 = getFragmentManager().beginTransaction();
+        ft1.detach(this).attach(this).commit();
     }
 
     @Override
@@ -67,31 +77,31 @@ public class ItemInfosFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new ItemInfosRecyclerViewAdapter(ServicesInfos.ITEMS, mListener1));
+            recyclerView.setAdapter(new ItemInfosRecyclerViewAdapter(ServicesInfos.ITEMS, mListener));
         }
         return view;
     }
 
-
- /*   @Override
+/*
+    @Override
    public void onAttach(Context context) {
         super.onAttach(context);
 
         //La
         if (context instanceof OnListFragmentInteractionListener) {
-            mListener1 = (OnListFragmentInteractionListener) context;
+            mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
     }
-*/
 
+*/
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener1 = null;
+        mListener = null;
     }
 
     /**

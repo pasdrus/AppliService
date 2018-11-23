@@ -26,8 +26,9 @@ public class ServicesInfos {
 
     static {
         // Add some sample items.
-        for (int i = 0; i <= 1; i++) {
-            String jsonString = MainActivity.loadJSONFromAsset();
+        String jsonString = MainActivity.loadJSONFromAsset();
+        for (int i = 0; i <= jsonString.length(); i++) {
+
             try{
 
                 ////BORDEL POUR RENTRER DANS LE JSON :

@@ -2,6 +2,7 @@ package com.example.baptiste.servicesapp;
 
 import android.content.SharedPreferences;
 import android.media.Image;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -30,13 +31,13 @@ import java.util.List;
 
 public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfosRecyclerViewAdapter.ViewHolder> {
 
-    private final List<ServicesInfos.ServicesItemInfos> mValues1;
-    private final OnListFragmentInteractionListener mListener1;
+    private final List<ServicesInfos.ServicesItemInfos> mValues;
+    private final OnListFragmentInteractionListener mListener;
     int i=0;
 
     public ItemInfosRecyclerViewAdapter(List<ServicesInfos.ServicesItemInfos> items, OnListFragmentInteractionListener listener) {
-        mValues1 = items;
-        mListener1 = listener;
+        mValues = items;
+        mListener = listener;
     }
 
     @Override
@@ -58,9 +59,9 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
 
         //holder.mContentView.setText(mValues1.get(position).firstValue);
         //holder.mContentTestView.setText(mValues1.get(position).section);
-        String type = mValues1.get(position).type;
-        String service = mValues1.get(position).serviceString;
-        int fin = mValues1.size();
+        String type = mValues.get(position).type;
+        String service = mValues.get(position).serviceString;
+        int fin = mValues.size();
 
         SharedPreferences prefs = MainActivity.tcontext.getSharedPreferences("Preferences", 0);
         String restoredText = prefs.getString("Service", null);
@@ -72,13 +73,13 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                     case "edit":
                         EditText editText = new EditText(holder.mLayout.getContext());
                         editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                        editText.setHint(mValues1.get(position).firstValue +" : " + position + " " + fin);
+                        editText.setHint(mValues.get(position).firstValue);
                         holder.mLayout.addView(editText);
                         break;
                     case "label":
                         TextView label = new TextView(holder.mLayout.getContext());
                         label.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                        label.setText(mValues1.get(position).firstValue +" : " + position + " " + fin);
+                        label.setText(mValues.get(position).firstValue);
                         holder.mLayout.addView(label);
                         break;
                     case "radioGroup":
@@ -86,18 +87,19 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                         radioGroup.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                         RadioButton radioButton = new RadioButton(MainActivity.tcontext);
                         radioButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                        radioButton.setText(mValues1.get(position).firstValue +" : " + position + " " + fin);
+                        radioButton.setText(mValues.get(position).firstValue);
                         radioGroup.addView(radioButton);
                         holder.mLayout.addView(radioGroup);
                         break;
                     case "button":
                         Button bouton = new Button(holder.mLayout.getContext());
                         bouton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                        bouton.setText(mValues1.get(position).firstValue +" : " + position + " " + fin);
+                        bouton.setText(mValues.get(position).firstValue);
                         holder.mLayout.addView(bouton);
                         break;
                 }
 
+        }
             //met un bouton mais seulement à la fin
             //à voir si on peut mettre un bouton à chaque changement de service
             //genre boucle qui check jus'à changement et on rajoute un bouton juste avant
@@ -119,9 +121,9 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                 holder.mLayout.addView(bouton);
 
 
-            }*/
 
-        }
+
+       // }
 
 /*
         if(mValues1.get(position).type.equals("edit")){
@@ -144,10 +146,10 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener1) {
+                if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener1.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(holder.mItem);
                 }
             }
         });
@@ -155,7 +157,7 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
 
     @Override
     public int getItemCount() {
-        return mValues1.size();
+        return mValues.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -178,5 +180,4 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
             return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
-
 }

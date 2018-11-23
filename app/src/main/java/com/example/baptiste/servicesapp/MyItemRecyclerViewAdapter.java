@@ -1,11 +1,10 @@
 package com.example.baptiste.servicesapp;
 
-import android.app.AlertDialog;
-import android.app.FragmentTransaction;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.media.Image;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 import com.example.baptiste.servicesapp.ItemFragment.OnListFragmentInteractionListener;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -59,6 +57,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                 SharedPreferences.Editor editor = MainActivity.tcontext.getSharedPreferences("Preferences",0).edit();
                 editor.putString("Service",mValues.get(i).title);
                 editor.apply();
+                MainActivity.TestRefresh(MainActivity.sViewPager);
+
+
 
                 //A voir pour transferer tous les items via ce bouton
                 //on peut certainement tout envoyer d'un coup via le servicesContent

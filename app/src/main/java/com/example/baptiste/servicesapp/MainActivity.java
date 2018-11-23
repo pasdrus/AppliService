@@ -1,5 +1,6 @@
 package com.example.baptiste.servicesapp;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -19,10 +20,11 @@ import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
+    static FragmentPagerAdapter sFragmentPagerAdapter;
     static Context tcontext;
-    DialogInterface.OnClickListener listener;
     static ViewPager sViewPager;
-    //static SharedPreferences.Editor editor;
+    DialogInterface.OnClickListener listener;
+
 
 
 
@@ -36,17 +38,18 @@ public class MainActivity extends AppCompatActivity {
         vpPager.setAdapter(adapterViewPager);
         tcontext = getApplicationContext();
         sViewPager = findViewById(R.id.vpPager);
-
+        sFragmentPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         SharedPreferences.Editor editor = getSharedPreferences("Preferences",0).edit();
+        editor.clear();
         editor.apply();
+    }
 
-
-
+    public static void TestRefresh(ViewPager vp){
+        vp.setAdapter(sFragmentPagerAdapter);
     }
 
     public static void setCurrentItem(int item, boolean smoothScroll) {
         sViewPager.setCurrentItem(item, smoothScroll);
-
     }
 
 
@@ -67,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
     {
         SharedPreferences prefs = getSharedPreferences("Preferences", 0);
         String restoredText = prefs.getString("Service", null);
-
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Ceci est un test" + restoredText);
         alertDialogBuilder.setPositiveButton("OK", listener);
@@ -107,16 +109,15 @@ public class MainActivity extends AppCompatActivity {
     public static class MyPagerAdapter extends FragmentPagerAdapter {
         private static int NUM_ITEMS = 4;
 
+
         public MyPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
-
         // Returns total number of pages
         @Override
         public int getCount() {
             return NUM_ITEMS;
         }
-
 
         // Returns the fragment to display for that page
         @Override
@@ -128,13 +129,11 @@ public class MainActivity extends AppCompatActivity {
                     return ItemInfosFragment.newInstance(1);
                     //return FirstFragment.newInstance(1, "Page # 2");
                 case 2: // Fragment # 1 - This will show SecondFragment
-                    //return FirstFragment.newInstance(1, "Page # 2");
                     return Fuck.newInstance(1);
-                    //return ItemFragment.newInstance(1);
                 case 3: // Fragment # 1 - This will show SecondFragment
-                    return Fuck.newInstance(1);
+                    return ItemInfosFragment.newInstance(1);
                 case 4: // Fragment # 1 - This will show SecondFragment
-                    return SecondFragment.newInstance(4, "Page # 5");
+                    return ItemInfosFragment.newInstance(1);
                 default:
                     return null;
             }
