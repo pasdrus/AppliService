@@ -19,15 +19,15 @@ public class ServicesInfos {
         ITEM_MAP.put(item.id, item);
     }
 
-    private static ServicesItemInfos createServicesItem(int position, String section,String type,String firstValue,String serviceString) {
-        return new ServicesItemInfos(String.valueOf(position),section,type,firstValue,serviceString);
+    private static ServicesItemInfos createServicesItem(int position, String section,String type,String firstValue,String serviceString,boolean end) {
+        return new ServicesItemInfos(String.valueOf(position),section,type,firstValue,serviceString,end);
     }
 
 
     static {
         // Add some sample items.
-        String jsonString = MainActivity.loadJSONFromAsset();
-        for (int i = 0; i <= jsonString.length(); i++) {
+        String jsonString = MainActivity.loadJSONFromAsset("service.json");
+        for (int i = 0; i <= 2; i++) {
 
             try{
 
@@ -52,8 +52,14 @@ public class ServicesInfos {
                     String type = ServiceArrayObject.getString("type");
                     JSONArray tableauValue = ServiceArrayObject.getJSONArray("value");
                     String firstValue = tableauValue.getString(0);
+                    boolean end = false;
 
-                    addItem(createServicesItem(i+1,section,type,firstValue,serviceNameString));
+                    if(j == ServiceArray.length()-1){
+                        end = true;
+                    }
+
+
+                    addItem(createServicesItem(i+1,section,type,firstValue,serviceNameString,end));
                 }
 
 
@@ -68,13 +74,15 @@ public class ServicesInfos {
         public final String type;
         public final String firstValue;
         public final String serviceString;
+        public final boolean end;
 
-        public ServicesItemInfos(String id,String section,String type,String firstValue,String serviceString) {
+        public ServicesItemInfos(String id,String section,String type,String firstValue,String serviceString,boolean end) {
             this.id = id;
             this.section = section;
             this.type = type;
             this.firstValue = firstValue;
             this.serviceString = serviceString;
+            this.end = end;
         }
     }
 }

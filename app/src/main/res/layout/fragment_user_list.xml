@@ -6,13 +6,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list"
-    android:name="com.example.baptiste.servicesapp.ItemInfosFragment"
+    android:name="com.example.baptiste.servicesapp.UserFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    tools:context=".ItemInfosFragment"
-    tools:listitem="@layout/fragment_item_infos" />
+    tools:context=".UserFragment"
+    tools:listitem="@layout/fragment_user" />
 
 
 

@@ -83,10 +83,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static String loadJSONFromAsset(){
+    public static String loadJSONFromAsset(String file){
         String json = null;
         try{
-            InputStream is = tcontext.getAssets().open("service.json");
+            InputStream is = tcontext.getAssets().open(file);
 
             int size = is.available();
 
@@ -127,9 +127,8 @@ public class MainActivity extends AppCompatActivity {
                     return ItemFragment.newInstance(1);
                 case 1: // Fragment # 0 - This will show FirstFragment different title
                     return ItemInfosFragment.newInstance(1);
-                    //return FirstFragment.newInstance(1, "Page # 2");
                 case 2: // Fragment # 1 - This will show SecondFragment
-                    return Fuck.newInstance(1);
+                    return UserFragment.newInstance(1);
                 case 3: // Fragment # 1 - This will show SecondFragment
                     return ItemInfosFragment.newInstance(1);
                 case 4: // Fragment # 1 - This will show SecondFragment

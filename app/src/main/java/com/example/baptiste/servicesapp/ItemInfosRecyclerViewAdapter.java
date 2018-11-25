@@ -1,5 +1,6 @@
 package com.example.baptiste.servicesapp;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.Image;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -20,6 +21,12 @@ import android.widget.TextView;
 import com.example.baptiste.servicesapp.ItemInfosFragment.OnListFragmentInteractionListener;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +41,7 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
     private final List<ServicesInfos.ServicesItemInfos> mValues;
     private final OnListFragmentInteractionListener mListener;
     int i=0;
+    private static String LastService = "Netflix";
 
     public ItemInfosRecyclerViewAdapter(List<ServicesInfos.ServicesItemInfos> items, OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -61,14 +69,13 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
         //holder.mContentTestView.setText(mValues1.get(position).section);
         String type = mValues.get(position).type;
         String service = mValues.get(position).serviceString;
+
         int fin = mValues.size();
 
         SharedPreferences prefs = MainActivity.tcontext.getSharedPreferences("Preferences", 0);
         String restoredText = prefs.getString("Service", null);
 
         if(service.equals(restoredText)) {
-
-
                 switch (type) {
                     case "edit":
                         EditText editText = new EditText(holder.mLayout.getContext());
@@ -99,49 +106,34 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                         break;
                 }
 
-        }
-            //met un bouton mais seulement à la fin
-            //à voir si on peut mettre un bouton à chaque changement de service
-            //genre boucle qui check jus'à changement et on rajoute un bouton juste avant
-            //à check aussi le changement de
-            /*if(position==fin-1){
+            if(mValues.get(position).end){
                 Button bouton = new Button(holder.mLayout.getContext());
                 bouton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                bouton.setText("Retour");
+                bouton.setText("Valider");
+                holder.mLayout.addView(bouton);
+
                 bouton.setOnClickListener(new View.OnClickListener(){
 
                     @Override
                     public void onClick(View v) {
-                        SharedPreferences.Editor editor = holder.mLayout.getContext().getSharedPreferences("Preferences",0).edit();
+                        /*SharedPreferences.Editor editor = holder.mLayout.getContext().getSharedPreferences("Preferences",0).edit();
                         editor.clear();
-                        editor.apply();
-                        MainActivity.setCurrentItem(0,true);
+                        editor.apply();*/
+
+                        String jsonString = MainActivity.loadJSONFromAsset("users.json");
+                        try {
+                            JSONObject obj = new JSONObject(jsonString);
+                            obj.put("name","ta mere");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 });
-                holder.mLayout.addView(bouton);
 
+            }
 
-
-
-       // }
-
-/*
-        if(mValues1.get(position).type.equals("edit")){
-
-            Button btnTag = new Button(MainActivity.tcontext);
-            btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            btnTag.setText("Button");
-
-            holder.mLayout.addView(btnTag);
-        }else{
-            Button btnTag = new Button(MainActivity.tcontext);
-            btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            btnTag.setText("mercé");
-
-            holder.mLayout.addView(btnTag);
         }
-        */
-
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
