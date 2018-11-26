@@ -57,12 +57,24 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         label3.setText(mValues.get(position).serviceString);
         holder.mLayout.addView(label3);
 
-        if (service.equals(restoredText)) {
+        SharedPreferences users = MainActivity.tcontext.getSharedPreferences("Users", 0);
+        String Toast = users.getString("EditorText1", null);
+
+        /*TextView label1 = new TextView(holder.mLayout.getContext());
+        label1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        label1.setText(Toast);
+        holder.mLayout.addView(label1);
+*/
+
+        /*if (service.equals(restoredText)) {
+            SharedPreferences users = MainActivity.tcontext.getSharedPreferences("Users", 0);
+            String Toast = users.getString("EditorText1", null);
+
             TextView label1 = new TextView(holder.mLayout.getContext());
             label1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            label1.setText(mValues.get(position).name);
+            label1.setText(Toast);
             holder.mLayout.addView(label1);
-        }
+        }*/
     }
 
 

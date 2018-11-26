@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 
 public class MainActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
@@ -60,8 +61,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
 
     }
-
-
+    /**
+    SharedPreferences prefs = getSharedPreferences("Preferences", 0);
+    String restoredText = prefs.getString("Service", null);
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Ceci est un test" + restoredText);
+        alertDialogBuilder.setPositiveButton("OK", listener);
+        alertDialogBuilder.show();
+**/
 
     //Méthode appellée dans myactionbar
     //Important de mettre MenuItem au lieu de menu car c'est le bouton d'un menu? en tout cas
@@ -70,11 +77,58 @@ public class MainActivity extends AppCompatActivity {
     {
         SharedPreferences prefs = getSharedPreferences("Preferences", 0);
         String restoredText = prefs.getString("Service", null);
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Ceci est un test" + restoredText);
+        alertDialogBuilder.setMessage(
+                "Ceci est un test" + restoredText+
+                        "\n\nmemoire utilisé : " + logMemoryInfo() + " Mo"+
+                        "\n\nCPU : " + readUsage()* 100 + " %");
         alertDialogBuilder.setPositiveButton("OK", listener);
         alertDialogBuilder.show();
 
+    }
+
+    private float logMemoryInfo() {
+        long mb = 1024;
+        Runtime runtime = Runtime.getRuntime();
+        float mem = (runtime.totalMemory() - runtime.freeMemory()) / mb;
+
+        return mem;
+    }
+
+    private float readUsage() {
+        try {
+            RandomAccessFile reader = new RandomAccessFile("/proc/stat", "r");
+            String load = reader.readLine();
+
+            String[] toks = load.split(" ");
+
+            long idle1 = Long.parseLong(toks[5]);
+            long cpu1 = Long.parseLong(toks[2]) + Long.parseLong(toks[3]) + Long.parseLong(toks[4])
+                    + Long.parseLong(toks[6]) + Long.parseLong(toks[7]) + Long.parseLong(toks[8]);
+
+            try {
+                Thread.sleep(360);
+            } catch (Exception e) {}
+
+            reader.seek(0);
+            load = reader.readLine();
+            reader.close();
+
+            toks = load.split(" ");
+
+            long idle2 = Long.parseLong(toks[5]);
+            long cpu2 = Long.parseLong(toks[2]) + Long.parseLong(toks[3]) + Long.parseLong(toks[4])
+                    + Long.parseLong(toks[6]) + Long.parseLong(toks[7]) + Long.parseLong(toks[8]);
+
+            return (float)(cpu2 - cpu1) / ((cpu2 + idle2) - (cpu1 + idle1));
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return 0;
     }
 
 

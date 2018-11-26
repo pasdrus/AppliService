@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import com.example.baptiste.servicesapp.ItemInfosFragment.OnListFragmentInteractionListener;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,6 +44,7 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
     private final OnListFragmentInteractionListener mListener;
     int i=0;
     private static String LastService = "Netflix";
+    private ArrayList al = new ArrayList();
 
     public ItemInfosRecyclerViewAdapter(List<ServicesInfos.ServicesItemInfos> items, OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -61,10 +64,6 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-
-
-
-
         //holder.mContentView.setText(mValues1.get(position).firstValue);
         //holder.mContentTestView.setText(mValues1.get(position).section);
         String type = mValues.get(position).type;
@@ -82,12 +81,14 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                         editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                         editText.setHint(mValues.get(position).firstValue);
                         holder.mLayout.addView(editText);
+                        al.add(holder.mLayout.getChildAt(0));
                         break;
                     case "label":
                         TextView label = new TextView(holder.mLayout.getContext());
                         label.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                         label.setText(mValues.get(position).firstValue);
                         holder.mLayout.addView(label);
+                        al.add(holder.mLayout.getChildAt(0));
                         break;
                     case "radioGroup":
                         RadioGroup radioGroup = new RadioGroup(holder.mLayout.getContext());
@@ -97,14 +98,18 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                         radioButton.setText(mValues.get(position).firstValue);
                         radioGroup.addView(radioButton);
                         holder.mLayout.addView(radioGroup);
+                        al.add(holder.mLayout.getChildAt(0));
                         break;
                     case "button":
                         Button bouton = new Button(holder.mLayout.getContext());
                         bouton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                         bouton.setText(mValues.get(position).firstValue);
                         holder.mLayout.addView(bouton);
+                        al.add(holder.mLayout.getChildAt(0));
                         break;
                 }
+
+
 
             if(mValues.get(position).end){
                 Button bouton = new Button(holder.mLayout.getContext());
@@ -120,19 +125,18 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                         editor.clear();
                         editor.apply();*/
 
-                        String jsonString = MainActivity.loadJSONFromAsset("users.json");
-                        try {
-                            JSONObject obj = new JSONObject(jsonString);
-                            obj.put("name","ta mere");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        listTest();
+
+                        MainActivity.TestRefresh(MainActivity.sViewPager);
+
+
+                        MainActivity.setCurrentItem(2,true);
+
+
 
                     }
                 });
-
             }
-
         }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +154,67 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
     @Override
     public int getItemCount() {
         return mValues.size();
+    }
+
+    public void listTest(){
+        //obj.put("name",((TextView) al.get(i)).getText().toString());
+        String jsonString = MainActivity.loadJSONFromAsset("users.json");
+        SharedPreferences prefs = MainActivity.tcontext.getSharedPreferences("Preferences", 0);
+        String restoredText = prefs.getString("Service", null);
+
+        for(int i =0;i<al.size();i++){
+            if(al.get(i) instanceof EditText){
+
+
+
+                try{
+
+                    ////BORDEL POUR RENTRER DANS LE JSON :
+                    //// AU CAS OU REGARDER : http://www.vogella.com/tutorials/AndroidJSON/article.html
+                    ///// https://abhiandroid.com/programming/json
+                    ///// https://stackoverflow.com/questions/13814503/reading-a-json-file-in-android
+                    JSONObject obj = new JSONObject(jsonString);
+
+                    JSONArray service = obj.getJSONArray("users");
+
+                    for (int j = 0; j <= 2; j++) {
+
+                        JSONObject serviceName = service.getJSONObject(j);
+
+                        String serviceNameString = serviceName.getString("title");
+
+                        JSONArray ServiceArray = serviceName.getJSONArray("elements");
+
+                        ServiceArray.put(j,"Test");
+
+                        /*if(serviceNameString.equals(restoredText)) {
+                            for (int x = 0; x <= ServiceArray.length(); x++) {
+                                JSONObject ServiceArray = ServiceArray.getJSONObject(x);
+
+                                SharedPreferences.Editor editor = MainActivity.tcontext.getSharedPreferences("Preferences",0).edit();
+                                editor.putString("Service",ServiceArray.getJSONObject(x).toString());
+                                editor.apply();
+
+                                ServiceArrayObject.put("name",((TextView) al.get(i)).getText().toString());
+                                SharedPreferences.Editor editor1 = MainActivity.tcontext.getSharedPreferences("Users",0).edit();
+                                editor1.putString("EditorText"+i,((TextView) al.get(i)).getText().toString());
+                                editor1.apply();
+                            }
+                        }**/
+
+
+
+                    }
+
+                }catch (JSONException e){e.printStackTrace();}
+            }else if(al.get(i) instanceof TextView){
+
+            }else if(al.get(i) instanceof RadioButton){
+
+            }else if(al.get(i) instanceof CheckBox){
+
+            }
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
