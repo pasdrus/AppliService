@@ -37,7 +37,7 @@ public class SecondFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_second, container, false);
         TextView tvLabel = (TextView) view.findViewById(R.id.tvLabel);
         TextView tvLabel2 = (TextView) view.findViewById(R.id.tvLabel2);
-        tvLabel.setText(page + " -- " + title);
+        tvLabel.setText(ItemInfosRecyclerViewAdapter.mapper.get("Netflix1").toString());
         tvLabel2.setText("Fragment 2");
         return view;
     }

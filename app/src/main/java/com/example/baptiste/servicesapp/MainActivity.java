@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                     return ItemInfosFragment.newInstance(1);
                 case 2: // Fragment # 1 - This will show SecondFragment
                     return UserFragment.newInstance(1);
+                    //return SecondFragment.newInstance(1,"Test");
                 case 3: // Fragment # 1 - This will show SecondFragment
                     return ItemInfosFragment.newInstance(1);
                 case 4: // Fragment # 1 - This will show SecondFragment

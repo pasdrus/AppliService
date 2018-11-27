@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.graphics.drawable.Drawable;
+import android.widget.EditText;
 
 
 public class User {
@@ -29,7 +30,15 @@ public class User {
         String jsonString = MainActivity.loadJSONFromAsset("users.json");
         for (int i = 0; i <= 2; i++) {
 
-            try{
+            try {
+                    String test1 = ((EditText) ItemInfosRecyclerViewAdapter.mapper.get("Netflix1")).getText().toString();
+                    addItem(createUsersItem(i+1,test1,"Netflix"));
+                }catch (Exception e){e.printStackTrace();}
+
+
+
+
+            /*try{
 
                 ////BORDEL POUR RENTRER DANS LE JSON :
                 //// AU CAS OU REGARDER : http://www.vogella.com/tutorials/AndroidJSON/article.html
@@ -55,7 +64,7 @@ public class User {
                 }
 
 
-            }catch (JSONException e){e.printStackTrace();}
+            }catch (JSONException e){e.printStackTrace();}**/
 
             /*
 
