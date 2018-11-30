@@ -105,6 +105,7 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                     break;
                 case "radioGroup":
                     RadioGroup radioGroup = new RadioGroup(holder.mLayout.getContext());
+                    radioGroup.setOrientation(LinearLayout.HORIZONTAL);
                     radioGroup.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                     for(int i = 0; i < mValues.get(position).firstValue.length(); i++) {
                         RadioButton radioButton = new RadioButton(MainActivity.tcontext);
@@ -191,7 +192,7 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
     public void listTest() {
         SharedPreferences prefs = MainActivity.tcontext.getSharedPreferences("Preferences", 0);
         String restoredText = prefs.getString("Service", null);
-        String filePath = MainActivity.tcontext.getFilesDir().getPath()+"/pasdrus.txt";
+        String filePath = MainActivity.tcontext.getFilesDir().getPath()+"/pasdrus1.txt";
         File f = new File(filePath);
         JSONObject utilisateur = new JSONObject();
         JSONObject valueUser = new JSONObject();
@@ -200,7 +201,7 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
         JSONObject User = new JSONObject();
         ArrayList<JSONObject> ServList = new ArrayList<>();
 
-        String jsonString = MainActivity.ReadFile("/pasdrus.txt");
+        String jsonString = MainActivity.ReadFile("/pasdrus1.txt");
         if(jsonString != "") {
             try {
                 JSONObject obj = new JSONObject(jsonString);

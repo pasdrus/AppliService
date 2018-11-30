@@ -1,19 +1,14 @@
 package com.example.baptiste.servicesapp;
 
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.baptiste.servicesapp.UserFragment.OnListFragmentInteractionListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -42,7 +37,6 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final int i =  position;
         holder.mItem = mValues.get(position);
         String service = mValues.get(position).service;
 
@@ -50,7 +44,6 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         String restoredText = prefs.getString("Service", null);
 
         if(service.equals(restoredText)) {
-            //holder.mIdView.setText(mValues.get(position).id);
             holder.mContentView.setText(mValues.get(position).name);
         }
 
@@ -69,9 +62,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            //mIdView = (TextView) view.findViewById(R.id.item_number);
             mContentView = (TextView) view.findViewById(R.id.content);
-
         }
 
         @Override

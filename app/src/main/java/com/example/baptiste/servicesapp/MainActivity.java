@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = getSharedPreferences("Preferences",0).edit();
         editor.clear();
         editor.apply();
-        CreateUserFile("/pasdrus.txt");
+        CreateUserFile("/pasdrus1.txt");
     }
 
     public void CreateUserFile(String file){
@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = MainActivity.tcontext.getSharedPreferences("Preferences",0).edit();
             editor.putString("Service",filePath);
             editor.apply();
+            System.out.println("TAZRAZR");
         }
         }
 

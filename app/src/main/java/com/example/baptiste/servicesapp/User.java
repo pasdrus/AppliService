@@ -1,12 +1,14 @@
 package com.example.baptiste.servicesapp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.graphics.drawable.Drawable;
+import android.renderscript.Sampler;
 import android.widget.EditText;
 
 
@@ -20,19 +22,19 @@ public class User {
         ITEM_MAP.put(item.id, item);
     }
 
-    private static UserItem createUsersItem(int position, String Name,String Service) {
-        return new UserItem(String.valueOf(position),Name,Service);
+    private static UserItem createUsersItem(int position, String Name,String Service,String Value) {
+        return new UserItem(String.valueOf(position),Name,Service,Value);
     }
 
 
     static {
         // Add some sample items.
 
-        String jsonString = MainActivity.ReadFile("/pasdrus.txt");
+        String jsonString = MainActivity.ReadFile("/pasdrus1.txt");
 
 
 
-        for (int i = 0; i <= 30; i++) {
+        for (int i = 0; i <= 2; i++) {
 
             try {
                     JSONObject obj = new JSONObject(jsonString);
@@ -45,12 +47,24 @@ public class User {
 
                     JSONArray values = serviceName.getJSONArray("Values");
 
-                    JSONObject jsonObject = values.getJSONObject(i);
+                    for(int j=0;j<values.length();j++){
+                        JSONObject newObject = values.getJSONObject(j);
+
+                        Iterator it = newObject.keys();
+                        while(it.hasNext()){
+                            String x = (String) it.next();
+                            String value = (String) newObject.get(x);
+                            addItem(createUsersItem(i+1,x, value,Name));
+                        }
+
+
+
+                    }
 
 
 
 
-                    addItem(createUsersItem(i+1,jsonObject.toString(),Name));
+
 
             }catch (Exception e){e.printStackTrace();}
         }
@@ -61,11 +75,13 @@ public class User {
         public final String id;
         public final String name;
         public final String service;
+        public final String value;
 
-        public UserItem(String id,String name,String service) {
+        public UserItem(String id,String name,String service,String value) {
             this.id = id;
             this.name = name;
             this.service = service;
+            this.value = value;
         }
     }
 }
