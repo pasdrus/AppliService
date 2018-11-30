@@ -28,34 +28,31 @@ public class User {
 
 
     static {
-        // Add some sample items.
-
         String jsonString = MainActivity.ReadFile("/pasdrus1.txt");
-
-
-
-        for (int i = 0; i <= 2; i++) {
-
             try {
+
                     JSONObject obj = new JSONObject(jsonString);
 
                     JSONArray service = obj.getJSONArray("users");
 
-                    JSONObject serviceName = service.getJSONObject(0);
+                    for(int i = 0;i<service.length();i++){
+                        JSONObject serviceName = service.getJSONObject(i);
 
-                    String Name = serviceName.getString("Service");
+                        String Service = serviceName.getString("Service");
 
-                    JSONArray values = serviceName.getJSONArray("Values");
+                        JSONArray values = serviceName.getJSONArray("Values");
 
-                    for(int j=0;j<values.length();j++){
-                        JSONObject newObject = values.getJSONObject(j);
+                        for(int j=0;j<values.length();j++){
+                            JSONObject newObject = values.getJSONObject(j);
 
-                        Iterator it = newObject.keys();
-                        while(it.hasNext()){
-                            String x = (String) it.next();
-                            String value = (String) newObject.get(x);
-                            addItem(createUsersItem(i+1,x, value,Name));
-                        }
+                            Iterator it = newObject.keys();
+                            while(it.hasNext()){
+                                String x = (String) it.next();
+                                String value = (String) newObject.get(x);
+                                addItem(createUsersItem(i+1,x, Service, value));
+                            }
+                    }
+
 
 
 
@@ -68,7 +65,7 @@ public class User {
 
             }catch (Exception e){e.printStackTrace();}
         }
-    }
+
 
 
     public static class UserItem {

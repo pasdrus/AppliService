@@ -44,7 +44,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         String restoredText = prefs.getString("Service", null);
 
         if(service.equals(restoredText)) {
-            holder.mContentView.setText(mValues.get(position).name);
+            holder.mContentView.setText(mValues.get(position).name + " : " +mValues.get(position).value);
         }
 
     }
