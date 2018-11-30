@@ -192,7 +192,7 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
     public void listTest() {
         SharedPreferences prefs = MainActivity.tcontext.getSharedPreferences("Preferences", 0);
         String restoredText = prefs.getString("Service", null);
-        String filePath = MainActivity.tcontext.getFilesDir().getPath()+"/pasdrus1.txt";
+        String filePath = MainActivity.tcontext.getFilesDir().getPath()+"/Utilisateurs.txt";
         File f = new File(filePath);
         JSONObject utilisateur = new JSONObject();
         JSONObject valueUser = new JSONObject();
@@ -201,7 +201,7 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
         JSONObject User = new JSONObject();
         ArrayList<JSONObject> ServList = new ArrayList<>();
 
-        String jsonString = MainActivity.ReadFile("/pasdrus1.txt");
+        String jsonString = MainActivity.ReadFile("/Utilisateurs.txt");
         if(jsonString != "") {
             try {
                 JSONObject obj = new JSONObject(jsonString);

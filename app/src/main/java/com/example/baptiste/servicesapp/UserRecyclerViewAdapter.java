@@ -6,9 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.baptiste.servicesapp.UserFragment.OnListFragmentInteractionListener;
+
+import org.json.JSONException;
 
 import java.util.List;
 
@@ -31,24 +35,32 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item, parent, false);
+                .inflate(R.layout.fragment_user, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        String service = mValues.get(position).service;
 
-        SharedPreferences prefs = MainActivity.tcontext.getSharedPreferences("Preferences", 0);
-        String restoredText = prefs.getString("Service", null);
+        LinearLayout mLayoutsub = new LinearLayout(MainActivity.tcontext);
+        mLayoutsub.setBottom(15);
+        String s = "";
+        for (User.UserSubItem usi : mValues.get(position).list) {
+            String service = usi.service;
 
-        System.out.println(mValues.get(position).name + " : " +mValues.get(position).value + " : " + mValues.get(position).service);
-        //holder.mContentView.setText(mValues.get(position).name + " : " +mValues.get(position).value + " : " + mValues.get(position).service);
+            SharedPreferences prefs = MainActivity.tcontext.getSharedPreferences("Preferences", 0);
+            String restoredText = prefs.getString("Service", null);
 
-       if(service.equals(restoredText)) {
-           holder.mContentView.setText(mValues.get(position).name + " : " +mValues.get(position).value);
+            if (service.equals(restoredText)) {
+                s = s.concat(usi.name+ " : "+ usi.value+"\n");
+                //mLayoutsub.addView(label);
+            }
         }
+        TextView label = new TextView(holder.mLayout.getContext());
+        label.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        label.setText(s);
+        holder.mLayout.addView(label);
 
     }
 
@@ -61,11 +73,13 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         public final View mView;
         public final TextView mContentView;
         public User.UserItem mItem;
+        public final LinearLayout mLayout;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mContentView = (TextView) view.findViewById(R.id.content);
+            mLayout =(LinearLayout) view.findViewById(R.id.linearlayout);
         }
 
         @Override

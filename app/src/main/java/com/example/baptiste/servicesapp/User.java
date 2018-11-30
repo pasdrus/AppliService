@@ -22,50 +22,64 @@ public class User {
         ITEM_MAP.put(item.id, item);
     }
 
-    private static UserItem createUsersItem(int position, String Name,String Service,String Value) {
-        return new UserItem(String.valueOf(position),Name,Service,Value);
+    private static UserSubItem createUsersSubItem(int position, String Name,String Service,String Value) {
+        return new UserSubItem(String.valueOf(position),Name,Service,Value);
+    }
+
+    private static UserItem createUsersItem(int position, ArrayList e) {
+        return new UserItem(String.valueOf(position),e);
     }
 
 
     static {
-        String jsonString = MainActivity.ReadFile("/pasdrus1.txt");
-            try {
+        String jsonString = MainActivity.ReadFile("/Utilisateurs.txt");
+        try {
 
-                    JSONObject obj = new JSONObject(jsonString);
+            JSONObject obj = new JSONObject(jsonString);
 
-                    JSONArray service = obj.getJSONArray("users");
+            JSONArray service = obj.getJSONArray("users");
 
-                    for(int i = 0;i<service.length();i++){
-                        JSONObject serviceName = service.getJSONObject(i);
+            for(int i = 0;i<service.length();i++){
+                JSONObject serviceName = service.getJSONObject(i);
+                String Service = serviceName.getString("Service");
 
-                        String Service = serviceName.getString("Service");
 
-                        JSONArray values = serviceName.getJSONArray("Values");
+                JSONArray values = serviceName.getJSONArray("Values");
 
-                        for(int j=0;j<values.length();j++){
-                            JSONObject newObject = values.getJSONObject(j);
-
-                            Iterator it = newObject.keys();
-                            while(it.hasNext()){
-                                String x = (String) it.next();
-                                String value = (String) newObject.get(x);
-                                addItem(createUsersItem(i+1,x, Service, value));
-
-                            }
-                        }
+                for(int j=0;j<values.length();j++){
+                    JSONObject newObject = values.getJSONObject(j);
+                    ArrayList<UserSubItem> usi = new ArrayList<>();
+                    Iterator it = newObject.keys();
+                    while(it.hasNext()){
+                        String x = (String) it.next();
+                        String value = (String) newObject.get(x);
+                        usi.add(createUsersSubItem(i+1,x, Service, value));
+                        addItem(createUsersItem(j,usi));
                     }
-            }catch (Exception e){e.printStackTrace();}
-        }
+                }
+
+            }
+        }catch (Exception e){e.printStackTrace();}
+    }
 
 
 
     public static class UserItem {
         public final String id;
+        public final ArrayList<UserSubItem> list;
+
+        public UserItem(String id, ArrayList l) {
+            this.id = id;
+            this.list = l;
+        }
+    }
+    public static class UserSubItem {
+        public final String id;
         public final String name;
         public final String service;
         public final String value;
 
-        public UserItem(String id,String name,String service,String value) {
+        public UserSubItem(String id,String name,String service,String value) {
             this.id = id;
             this.name = name;
             this.service = service;

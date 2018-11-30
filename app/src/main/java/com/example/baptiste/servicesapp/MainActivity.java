@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = getSharedPreferences("Preferences",0).edit();
         editor.clear();
         editor.apply();
-        CreateUserFile("/pasdrus1.txt");
+        CreateUserFile("/Utilisateurs.txt");
     }
 
     public void CreateUserFile(String file){
