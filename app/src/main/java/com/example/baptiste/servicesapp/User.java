@@ -50,19 +50,10 @@ public class User {
                                 String x = (String) it.next();
                                 String value = (String) newObject.get(x);
                                 addItem(createUsersItem(i+1,x, Service, value));
+
                             }
+                        }
                     }
-
-
-
-
-                    }
-
-
-
-
-
-
             }catch (Exception e){e.printStackTrace();}
         }
 

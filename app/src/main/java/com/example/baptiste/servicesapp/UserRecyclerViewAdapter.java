@@ -43,8 +43,11 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         SharedPreferences prefs = MainActivity.tcontext.getSharedPreferences("Preferences", 0);
         String restoredText = prefs.getString("Service", null);
 
-        if(service.equals(restoredText)) {
-            holder.mContentView.setText(mValues.get(position).name + " : " +mValues.get(position).value);
+        System.out.println(mValues.get(position).name + " : " +mValues.get(position).value + " : " + mValues.get(position).service);
+        //holder.mContentView.setText(mValues.get(position).name + " : " +mValues.get(position).value + " : " + mValues.get(position).service);
+
+       if(service.equals(restoredText)) {
+           holder.mContentView.setText(mValues.get(position).name + " : " +mValues.get(position).value);
         }
 
     }

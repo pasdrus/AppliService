@@ -100,10 +100,8 @@ public class MainActivity extends AppCompatActivity {
         String restoredText = prefs.getString("Service", null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Ceci est un test" + restoredText);
         alertDialogBuilder.setMessage(
-                "Ceci est un test" + restoredText+
-                        "\n\nmemoire utilisé : " + logMemoryInfo() + " Mo"+
+                        "memoire utilisé : " + logMemoryInfo() + " Mo"+
                         "\n\nCPU : " + readUsage()* 100 + " %");
         alertDialogBuilder.setPositiveButton("OK", listener);
         alertDialogBuilder.show();

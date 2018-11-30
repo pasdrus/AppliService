@@ -28,11 +28,6 @@ public class ServicesContent {
         String jsonString = MainActivity.loadJSONFromAsset("service.json");
         for (int i = 0; i <= 2; i++) {
             try{
-
-                ////BORDEL POUR RENTRER DANS LE JSON :
-                //// AU CAS OU REGARDER : http://www.vogella.com/tutorials/AndroidJSON/article.html
-                ///// https://abhiandroid.com/programming/json
-                ///// https://stackoverflow.com/questions/13814503/reading-a-json-file-in-android
                 JSONObject obj = new JSONObject(jsonString);
 
                 JSONArray service = obj.getJSONArray("services");
