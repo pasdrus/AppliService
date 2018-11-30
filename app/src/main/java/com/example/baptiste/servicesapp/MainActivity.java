@@ -15,6 +15,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -44,6 +52,48 @@ public class MainActivity extends AppCompatActivity {
         editor.clear();
         editor.apply();
     }
+
+    public void CreateUserFile(){
+        String filePath = MainActivity.tcontext.getFilesDir().getPath().toString() + "/pasdrusZskdhfsEE.txt";
+        File f = new File(filePath);
+        if(!f.exists()){
+            try {
+                f.createNewFile();
+                FileWriter fw = new FileWriter(f);
+                JSONObject obj = new JSONObject();
+                JSONArray jar = new JSONArray();
+                obj.put("user", jar);
+                fw.write(obj.toString());
+                System.out.println(obj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            try {
+                FileInputStream fis = new FileInputStream(f);
+                int size = fis.available();
+
+                byte[] buffer = new byte[size];
+
+                fis.read(buffer);
+
+                fis.close();
+
+                String json = new String(buffer,"UTF-8");
+                System.out.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO : "+ json);
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public static void TestRefresh(ViewPager vp){
         vp.setAdapter(sFragmentPagerAdapter);
@@ -185,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
                     return UserFragment.newInstance(1);
                     //return SecondFragment.newInstance(1,"Test");
                 case 3: // Fragment # 1 - This will show SecondFragment
+                    //return Developper_page.newInstance(0);
                     return ItemInfosFragment.newInstance(1);
                 case 4: // Fragment # 1 - This will show SecondFragment
                     return ItemInfosFragment.newInstance(1);

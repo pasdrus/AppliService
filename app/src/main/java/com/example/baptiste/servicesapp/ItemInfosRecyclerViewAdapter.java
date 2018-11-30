@@ -90,10 +90,7 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                         editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                         editText.setHint(mValues.get(position).firstValue);
                         holder.mLayout.addView(editText);
-                        //al.add(holder.mLayout.getChildAt(0));
-
-                        mapper.put(service+position,holder.mLayout.getChildAt(0));
-
+                        al.add(holder.mLayout.getChildAt(0));
                         break;
                     case "label":
                         TextView label = new TextView(holder.mLayout.getContext());
@@ -134,42 +131,9 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                     @Override
                     public void onClick(View v) {
 
-
                         listTest();
 
-                        try{
-
-                            File file = new File("users.txt");
-
-                            if (file.exists()) {
-                                SharedPreferences.Editor editor3 = holder.mLayout.getContext().getSharedPreferences("Preferences", 0).edit();
-                                editor3.putString("Service", "Test");
-                                editor3.apply();
-                                FileInputStream fis = new FileInputStream(new File("users.txt"));
-
-
-                                //FileInputStream fis;
-                                //fis = openFileInput("users.txt");
-
-                                StringBuffer fileContent = new StringBuffer("");
-
-                                byte[] buffer = new byte[1024];
-
-                                //while ((n = fis.read(buffer)) != -1) {
-                                //    fileContent.append(new String(buffer, 0, n));
-                                //}
-
-
-                                //JSONObject obj = new JSONObject(json);
-                                //String serviceName = obj.getJSONObject("Name").toString();
-
-                                SharedPreferences.Editor editor = holder.mLayout.getContext().getSharedPreferences("Preferences", 0).edit();
-                                editor.putString("Service", "Test");
-                                editor.apply();
-                            }
-
-                        }catch (IOException e){e.printStackTrace();}
-
+                        String filePath = MainActivity.tcontext.getFilesDir().getPath() + "/pasdrus.txt";
 
                         MainActivity.TestRefresh(MainActivity.sViewPager);
 
@@ -206,104 +170,41 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
         SharedPreferences prefs = MainActivity.tcontext.getSharedPreferences("Preferences", 0);
         String restoredText = prefs.getString("Service", null);
         FileWriter fos;
+        String filePath = MainActivity.tcontext.getFilesDir().getPath() + "/pasdrus.txt";
+        JSONObject utilisateur = new JSONObject();
+        JSONObject valueUser = new JSONObject();
+        JSONArray UserTab = new JSONArray();
+        JSONArray ServiceTab = new JSONArray();
+        JSONObject User = new JSONObject();
+
+        for(int i =0;i<al.size();i++){
+            if(al.get(i) instanceof EditText){
+
+                try {
+
+                    utilisateur.put(((EditText) al.get(i)).getHint().toString(),((EditText) al.get(i)).getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         try {
-            //SharedPreferences.Editor editor1 = MainActivity.tcontext.getSharedPreferences("Preferences",0).edit();
-            //editor1.putString("Service","caca");
-            //editor1.apply();
-            fos =  new FileWriter("users.txt");
 
-            //n'arrive pas à créer le fichier apparement
+            UserTab.put(utilisateur);
 
+            valueUser.put("Values",UserTab);
+            valueUser.put("Service",restoredText);
+            ServiceTab.put(valueUser);
+            User.put("users",ServiceTab);
 
-            JSONObject obj = new JSONObject();
-            JSONArray service = obj.getJSONArray("users");
-
-
-            JSONObject obj1 = new JSONObject();
-            obj1.put("Name", "crunchify.com");
-            obj1.put("Author", "App Shah");
-
-            JSONArray company = new JSONArray();
-            company.put("Compnay: eBay");
-            company.put("Compnay: Paypal");
-            company.put("Compnay: Google");
-            obj1.put("Company List", company);
-
-            fos.write(obj1.toString());
+            fos =  new FileWriter(filePath);
+            fos.write(User.toString());
 
 
 
         } catch (JSONException | IOException e) {
             e.printStackTrace();
-        }
-
-
-        for(int i =0;i<al.size();i++){
-
-
-
-            if(al.get(i) instanceof EditText){
-
-
-
-                SharedPreferences.Editor editor1 = MainActivity.tcontext.getSharedPreferences("Preferences",0).edit();
-                editor1.putString("Service",((EditText) al.get(i)).getHint().toString());
-                editor1.apply();
-
-                /*
-                try{
-                    ////BORDEL POUR RENTRER DANS LE JSON :
-                    //// AU CAS OU REGARDER : http://www.vogella.com/tutorials/AndroidJSON/article.html
-                    ///// https://abhiandroid.com/programming/json
-                    ///// https://stackoverflow.com/questions/13814503/reading-a-json-file-in-android
-                    JSONObject obj = new JSONObject(jsonString);
-
-                    JSONArray service = obj.getJSONArray("users");
-
-                    for (int j = 0; j <= 2; j++) {
-
-                        JSONObject serviceName = service.getJSONObject(j);
-
-                        String serviceNameString = serviceName.getString("title");
-
-                        JSONArray ServiceArray = serviceName.getJSONArray("elements");
-
-                        ServiceArray.put(j,"Test");
-
-                        if(serviceNameString.equals(restoredText)) {
-                            for (int x = 0; x <= ServiceArray.length(); x++) {
-                                JSONObject ServiceArray = ServiceArray.getJSONObject(x);
-
-                                SharedPreferences.Editor editor = MainActivity.tcontext.getSharedPreferences("Preferences",0).edit();
-                                editor.putString("Service",ServiceArray.getJSONObject(x).toString());
-                                editor.apply();
-
-                                ServiceArrayObject.put("name",((TextView) al.get(i)).getText().toString());
-                                SharedPreferences.Editor editor1 = MainActivity.tcontext.getSharedPreferences("Users",0).edit();
-                                editor1.putString("EditorText"+i,((TextView) al.get(i)).getText().toString());
-                                editor1.apply();
-                            }
-                        }
-                    }
-
-                }catch (JSONException e){e.printStackTrace();}**/
-            }else if(al.get(i) instanceof TextView){
-                SharedPreferences.Editor editor1 = MainActivity.tcontext.getSharedPreferences("Users",0).edit();
-                editor1.putString(restoredText+"TextView"+i,((TextView) al.get(i)).getText().toString());
-                editor1.apply();
-
-            }else if(al.get(i) instanceof RadioButton){
-                SharedPreferences.Editor editor1 = MainActivity.tcontext.getSharedPreferences("Users",0).edit();
-                editor1.putString(restoredText+"RadioButton"+i,((RadioButton) al.get(i)).getText().toString());
-                editor1.apply();
-
-            }else if(al.get(i) instanceof CheckBox){
-                SharedPreferences.Editor editor1 = MainActivity.tcontext.getSharedPreferences("Users",0).edit();
-                editor1.putString(restoredText+"CheckBoxText"+i,((TextView) al.get(i)).getText().toString());
-                editor1.apply();
-
-            }
         }
     }
 

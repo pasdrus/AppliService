@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".Developper_page"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+    <!-- TODO: Update blank fragment layout -->
+   <LinearLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:gravity="center"
+       android:layout_gravity="center">
+
+
+    <ImageView
+        android:id="@+id/developper1"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:src="@drawable/developper1" />
+
+   </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/developper_name1"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="@dimen/text_margin"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:text="Baptiste Boucher"/>
+    </LinearLayout>
+
+   <LinearLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:gravity="center"
+       android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/developper2"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:src="@drawable/developper2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/developper_name2"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="@dimen/text_margin"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:text="Baptiste Desprets"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/developper3"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:src="@drawable/developper3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/developper_name3"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="@dimen/text_margin"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:text="Romain Thuillez"/>
+    </LinearLayout>
+
+</LinearLayout>
+    </FrameLayout>
+</ScrollView>
