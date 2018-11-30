@@ -1,4 +1,5 @@
 package com.example.baptiste.servicesapp;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +20,7 @@ public class ServicesInfos {
         ITEM_MAP.put(item.id, item);
     }
 
-    private static ServicesItemInfos createServicesItem(int position, String section,String type,String firstValue,String serviceString,boolean end) {
+    private static ServicesItemInfos createServicesItem(int position, String section, String type, JSONArray firstValue, String serviceString, boolean end) {
         return new ServicesItemInfos(String.valueOf(position),section,type,firstValue,serviceString,end);
     }
 
@@ -59,7 +60,7 @@ public class ServicesInfos {
                     }
 
 
-                    addItem(createServicesItem(i+1,section,type,firstValue,serviceNameString,end));
+                    addItem(createServicesItem(i+1,section,type,tableauValue,serviceNameString,end));
                 }
 
 
@@ -72,11 +73,11 @@ public class ServicesInfos {
         public final String id;
         public final String section;
         public final String type;
-        public final String firstValue;
+        public final JSONArray firstValue;
         public final String serviceString;
         public final boolean end;
 
-        public ServicesItemInfos(String id,String section,String type,String firstValue,String serviceString,boolean end) {
+        public ServicesItemInfos(String id,String section,String type,JSONArray firstValue,String serviceString,boolean end) {
             this.id = id;
             this.section = section;
             this.type = type;

@@ -84,39 +84,62 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
         String restoredText = prefs.getString("Service", null);
 
         if(service.equals(restoredText)) {
-                switch (type) {
-                    case "edit":
-                        EditText editText = new EditText(holder.mLayout.getContext());
-                        editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                        editText.setHint(mValues.get(position).firstValue);
-                        holder.mLayout.addView(editText);
-                        al.add(holder.mLayout.getChildAt(0));
-                        break;
-                    case "label":
-                        TextView label = new TextView(holder.mLayout.getContext());
-                        label.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                        label.setText(mValues.get(position).firstValue);
-                        holder.mLayout.addView(label);
-                        al.add(holder.mLayout.getChildAt(0));
-                        break;
-                    case "radioGroup":
-                        RadioGroup radioGroup = new RadioGroup(holder.mLayout.getContext());
-                        radioGroup.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            switch (type) {
+                case "edit":
+                    EditText editText = new EditText(holder.mLayout.getContext());
+                    editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    try {
+                        editText.setHint(mValues.get(position).firstValue.getString(0));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    holder.mLayout.addView(editText);
+                    //al.add(holder.mLayout.getChildAt(0));
+
+                    mapper.put(service+position,holder.mLayout.getChildAt(0));
+
+                    break;
+                case "label":
+                    TextView label = new TextView(holder.mLayout.getContext());
+                    label.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    try {
+                        label.setText(mValues.get(position).firstValue.getString(0));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    holder.mLayout.addView(label);
+                    al.add(holder.mLayout.getChildAt(0));
+                    break;
+                case "radioGroup":
+                    RadioGroup radioGroup = new RadioGroup(holder.mLayout.getContext());
+                    radioGroup.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    for(int i = 0; i < mValues.get(position).firstValue.length(); i++) {
                         RadioButton radioButton = new RadioButton(MainActivity.tcontext);
                         radioButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                        radioButton.setText(mValues.get(position).firstValue);
+                        try {
+                            radioButton.setText(mValues.get(position).firstValue.getString(i));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("SDMFLSMDFLSMDLF SMDLF SLDf MSldf SM :" + mValues.get(position).firstValue);
+
                         radioGroup.addView(radioButton);
-                        holder.mLayout.addView(radioGroup);
-                        al.add(holder.mLayout.getChildAt(0));
-                        break;
-                    case "button":
-                        Button bouton = new Button(holder.mLayout.getContext());
-                        bouton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                        bouton.setText(mValues.get(position).firstValue);
-                        holder.mLayout.addView(bouton);
-                        al.add(holder.mLayout.getChildAt(0));
-                        break;
-                }
+                    }
+                    holder.mLayout.addView(radioGroup);
+                    al.add(holder.mLayout.getChildAt(0));
+                    break;
+                case "button":
+                    Button bouton = new Button(holder.mLayout.getContext());
+                    bouton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    try {
+                        bouton.setText(mValues.get(position).firstValue.getString(0));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    holder.mLayout.addView(bouton);
+                    al.add(holder.mLayout.getChildAt(0));
+                    break;
+            }
 
 
 
