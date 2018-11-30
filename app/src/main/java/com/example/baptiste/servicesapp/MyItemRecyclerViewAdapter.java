@@ -58,14 +58,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                 editor.putString("Service",mValues.get(i).title);
                 editor.apply();
                 MainActivity.TestRefresh(MainActivity.sViewPager);
-
-
-
-                //A voir pour transferer tous les items via ce bouton
-                //on peut certainement tout envoyer d'un coup via le servicesContent
-                //et ensuite le fragment s'update
-
-
                 MainActivity.setCurrentItem(1,true);
             }
         });

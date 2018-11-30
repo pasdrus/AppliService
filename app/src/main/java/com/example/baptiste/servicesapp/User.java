@@ -20,82 +20,39 @@ public class User {
         ITEM_MAP.put(item.id, item);
     }
 
-    private static UserItem createUsersItem(int position, String userName,String serviceString) {
-        return new UserItem(String.valueOf(position),userName,serviceString);
+    private static UserItem createUsersItem(int position, String Name,String Service) {
+        return new UserItem(String.valueOf(position),Name,Service);
     }
 
 
     static {
         // Add some sample items.
-        String jsonString = MainActivity.loadJSONFromAsset("users.json");
-        for (int i = 0; i <= 2; i++) {
+
+        String jsonString = MainActivity.ReadFile("/pasdrus.txt");
+
+
+
+        for (int i = 0; i <= 30; i++) {
 
             try {
-                    String test1 = ((EditText) ItemInfosRecyclerViewAdapter.mapper.get("Netflix1")).getText().toString();
-                    addItem(createUsersItem(i+1,test1,"Netflix"));
-                }catch (Exception e){e.printStackTrace();}
+                    JSONObject obj = new JSONObject(jsonString);
+
+                    JSONArray service = obj.getJSONArray("users");
+
+                    JSONObject serviceName = service.getJSONObject(0);
+
+                    String Name = serviceName.getString("Service");
+
+                    JSONArray values = serviceName.getJSONArray("Values");
+
+                    JSONObject jsonObject = values.getJSONObject(i);
 
 
 
 
-            /*try{
+                    addItem(createUsersItem(i+1,jsonObject.toString(),Name));
 
-                ////BORDEL POUR RENTRER DANS LE JSON :
-                //// AU CAS OU REGARDER : http://www.vogella.com/tutorials/AndroidJSON/article.html
-                ///// https://abhiandroid.com/programming/json
-                ///// https://stackoverflow.com/questions/13814503/reading-a-json-file-in-android
-                JSONObject obj = new JSONObject(jsonString);
-
-                JSONArray service = obj.getJSONArray("users");
-
-
-
-                JSONObject serviceName = service.getJSONObject(i);
-
-                String serviceNameString = serviceName.getString("title");
-
-                JSONArray ServiceArray = serviceName.getJSONArray("elements");
-
-                for(int j = 0; j <=ServiceArray.length();j++){
-                    JSONObject ServiceArrayObject = ServiceArray.getJSONObject(j);
-                    String userName = ServiceArrayObject.getString("name");
-
-                    addItem(createUsersItem(i+1,userName,serviceNameString));
-                }
-
-
-            }catch (JSONException e){e.printStackTrace();}**/
-
-            /*
-
-            try{
-
-                ////BORDEL POUR RENTRER DANS LE JSON :
-                //// AU CAS OU REGARDER : http://www.vogella.com/tutorials/AndroidJSON/article.html
-                ///// https://abhiandroid.com/programming/json
-                ///// https://stackoverflow.com/questions/13814503/reading-a-json-file-in-android
-                JSONObject obj = new JSONObject(jsonString);
-
-                JSONArray service = obj.getJSONArray("users");
-
-
-
-                JSONObject serviceName = service.getJSONObject(i);
-
-                String serviceNameString = serviceName.getString("title");
-
-                JSONArray ServiceArray = serviceName.getJSONArray("elements");
-
-                for(int j = 0; j <=ServiceArray.length();j++){
-                    JSONObject ServiceArrayObject = ServiceArray.getJSONObject(j);
-                    String userName = ServiceArrayObject.getString("name");
-
-                    addItem(createUsersItem(i+1,userName,serviceNameString));
-                }
-
-
-            }catch (JSONException e){e.printStackTrace();}
-            */
+            }catch (Exception e){e.printStackTrace();}
         }
     }
 
@@ -103,12 +60,12 @@ public class User {
     public static class UserItem {
         public final String id;
         public final String name;
-        public final String serviceString;
+        public final String service;
 
-        public UserItem(String id,String serviceString,String name) {
+        public UserItem(String id,String name,String service) {
             this.id = id;
-            this.serviceString = serviceString;
             this.name = name;
+            this.service = service;
         }
     }
 }

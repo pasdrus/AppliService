@@ -19,12 +19,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,49 +55,24 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = getSharedPreferences("Preferences",0).edit();
         editor.clear();
         editor.apply();
+        CreateUserFile("/pasdrus.txt");
     }
 
-    public void CreateUserFile(){
-        String filePath = MainActivity.tcontext.getFilesDir().getPath().toString() + "/pasdrusZskdhfsEE.txt";
+    public void CreateUserFile(String file){
+        String filePath = MainActivity.tcontext.getFilesDir().getPath()+file;
         File f = new File(filePath);
         if(!f.exists()){
             try {
                 f.createNewFile();
-                FileWriter fw = new FileWriter(f);
-                JSONObject obj = new JSONObject();
-                JSONArray jar = new JSONArray();
-                obj.put("user", jar);
-                fw.write(obj.toString());
-                System.out.println(obj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        else{
-            try {
-                FileInputStream fis = new FileInputStream(f);
-                int size = fis.available();
-
-                byte[] buffer = new byte[size];
-
-                fis.read(buffer);
-
-                fis.close();
-
-                String json = new String(buffer,"UTF-8");
-                System.out.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO : "+ json);
-
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else{
+            SharedPreferences.Editor editor = MainActivity.tcontext.getSharedPreferences("Preferences",0).edit();
+            editor.putString("Service",filePath);
+            editor.apply();
         }
-    }
-
+        }
 
     public static void TestRefresh(ViewPager vp){
         vp.setAdapter(sFragmentPagerAdapter);
@@ -111,14 +90,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
 
     }
-    /**
-    SharedPreferences prefs = getSharedPreferences("Preferences", 0);
-    String restoredText = prefs.getString("Service", null);
-    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Ceci est un test" + restoredText);
-        alertDialogBuilder.setPositiveButton("OK", listener);
-        alertDialogBuilder.show();
-**/
 
     //Méthode appellée dans myactionbar
     //Important de mettre MenuItem au lieu de menu car c'est le bouton d'un menu? en tout cas
@@ -204,7 +175,27 @@ public class MainActivity extends AppCompatActivity {
 
         }catch (IOException e){e.printStackTrace();}
         return json;
+    }
 
+    public static String ReadFile(String file){
+        String filePath = MainActivity.tcontext.getFilesDir().getPath() + file;
+        File f = new File(filePath);
+
+        StringBuilder text = null;
+        try {
+            //Read text from file
+            text = new StringBuilder();
+
+            BufferedReader br = new BufferedReader(new FileReader(f));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+            }
+            br.close();
+        }catch (IOException e) {e.printStackTrace();}
+        return text.toString();
     }
 
 
@@ -235,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                     return UserFragment.newInstance(1);
                     //return SecondFragment.newInstance(1,"Test");
                 case 3: // Fragment # 1 - This will show SecondFragment
-                    //return Developper_page.newInstance(0);
+                    //return Developper_page.newInstance(1);
                     return ItemInfosFragment.newInstance(1);
                 case 4: // Fragment # 1 - This will show SecondFragment
                     return ItemInfosFragment.newInstance(1);

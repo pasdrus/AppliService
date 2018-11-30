@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.baptiste.servicesapp.ItemInfosFragment.OnListFragmentInteractionListener;
@@ -73,13 +74,8 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        //holder.mContentView.setText(mValues1.get(position).firstValue);
-        //holder.mContentTestView.setText(mValues1.get(position).section);
         String type = mValues.get(position).type;
         String service = mValues.get(position).serviceString;
-
-        int fin = mValues.size();
-
         SharedPreferences prefs = MainActivity.tcontext.getSharedPreferences("Preferences", 0);
         String restoredText = prefs.getString("Service", null);
 
@@ -94,10 +90,7 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                         e.printStackTrace();
                     }
                     holder.mLayout.addView(editText);
-                    //al.add(holder.mLayout.getChildAt(0));
-
-                    mapper.put(service+position,holder.mLayout.getChildAt(0));
-
+                    al.add(holder.mLayout.getChildAt(0));
                     break;
                 case "label":
                     TextView label = new TextView(holder.mLayout.getContext());
@@ -118,18 +111,20 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                         radioButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                         try {
                             radioButton.setText(mValues.get(position).firstValue.getString(i));
+
+                            radioButton.setHint(mValues.get(position).section);
+
+                            radioButton.setId(position);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("SDMFLSMDFLSMDLF SMDLF SLDf MSldf SM :" + mValues.get(position).firstValue);
-
                         radioGroup.addView(radioButton);
                     }
                     holder.mLayout.addView(radioGroup);
                     al.add(holder.mLayout.getChildAt(0));
                     break;
                 case "button":
-                    Button bouton = new Button(holder.mLayout.getContext());
+                    CheckBox bouton = new CheckBox(holder.mLayout.getContext());
                     bouton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                     try {
                         bouton.setText(mValues.get(position).firstValue.getString(0));
@@ -137,6 +132,23 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
                         e.printStackTrace();
                     }
                     holder.mLayout.addView(bouton);
+                    al.add(holder.mLayout.getChildAt(0));
+                    break;
+                case "switch":
+                    Switch sw = new Switch(holder.mLayout.getContext());
+                    try {
+                        sw.setHint(mValues.get(position).firstValue.getString(0));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    sw.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    sw.setText(mValues.get(position).section);
+                    try {
+                        sw.setChecked(mValues.get(position).firstValue.getBoolean(0));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    holder.mLayout.addView(sw);
                     al.add(holder.mLayout.getChildAt(0));
                     break;
             }
@@ -153,18 +165,9 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
 
                     @Override
                     public void onClick(View v) {
-
                         listTest();
-
-                        String filePath = MainActivity.tcontext.getFilesDir().getPath() + "/pasdrus.txt";
-
                         MainActivity.TestRefresh(MainActivity.sViewPager);
-
-
                         MainActivity.setCurrentItem(2,true);
-
-
-
                     }
                 });
             }
@@ -174,8 +177,6 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
                 }
             }
@@ -188,24 +189,77 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
     }
 
     public void listTest() {
-        //obj.put("name",((TextView) al.get(i)).getText().toString());
-        String jsonString = MainActivity.loadJSONFromAsset("users.json");
         SharedPreferences prefs = MainActivity.tcontext.getSharedPreferences("Preferences", 0);
         String restoredText = prefs.getString("Service", null);
-        FileWriter fos;
-        String filePath = MainActivity.tcontext.getFilesDir().getPath() + "/pasdrus.txt";
+        String filePath = MainActivity.tcontext.getFilesDir().getPath()+"/pasdrus.txt";
+        File f = new File(filePath);
         JSONObject utilisateur = new JSONObject();
         JSONObject valueUser = new JSONObject();
         JSONArray UserTab = new JSONArray();
         JSONArray ServiceTab = new JSONArray();
         JSONObject User = new JSONObject();
+        ArrayList<JSONObject> ServList = new ArrayList<>();
 
+        String jsonString = MainActivity.ReadFile("/pasdrus.txt");
+        if(jsonString != "") {
+            try {
+                JSONObject obj = new JSONObject(jsonString);
+                JSONArray service = obj.getJSONArray("users");
+                for(int i = 0; i < service.length(); i++){
+                    JSONObject serv = service.getJSONObject(i);
+                    if(serv.get("Service").toString().equals(restoredText)) {
+                        UserTab = serv.getJSONArray("Values");
+                    }else{
+                        ServList.add(serv);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         for(int i =0;i<al.size();i++){
             if(al.get(i) instanceof EditText){
 
                 try {
-
                     utilisateur.put(((EditText) al.get(i)).getHint().toString(),((EditText) al.get(i)).getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if(al.get(i) instanceof RadioGroup){
+                try {
+                    RadioGroup trueRadio = ((RadioGroup) al.get(i));
+                    RadioButton newView = null;
+                    int x = trueRadio.getChildCount();
+
+                    for(int y = 0; y<x;y++){
+                        boolean checked = ((RadioButton) trueRadio.getChildAt(y)).isChecked();
+                        if(checked){
+                            newView = (RadioButton) trueRadio.getChildAt(y);
+                        }
+                    }
+                    utilisateur.put(newView.getHint().toString(),newView.getText().toString());
+                }catch (JSONException e) {
+                  e.printStackTrace();
+                }
+            }else if(al.get(i) instanceof Switch){
+                try {
+                    if(((Switch) al.get(i)).isChecked()){
+                        utilisateur.put(((Switch) al.get(i)).getText().toString(),"Yes");
+                    }else {
+                        utilisateur.put(((Switch) al.get(i)).getText().toString(),"No");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if(al.get(i) instanceof CheckBox){
+                try {
+                    if(((CheckBox) al.get(i)).isChecked()){
+                        utilisateur.put(((CheckBox) al.get(i)).getText().toString(),"Yes");
+                    }else {
+                        utilisateur.put(((CheckBox) al.get(i)).getText().toString(),"No");
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -215,16 +269,22 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
         try {
 
             UserTab.put(utilisateur);
+            valueUser.put("Service", restoredText);
+            valueUser.put("Values", UserTab);
+            ServList.add(valueUser);
+            for(JSONObject j : ServList){
+                ServiceTab.put(j);
+            }
+            User.put("users", ServiceTab);
 
-            valueUser.put("Values",UserTab);
-            valueUser.put("Service",restoredText);
-            ServiceTab.put(valueUser);
-            User.put("users",ServiceTab);
+            FileOutputStream fOut = new FileOutputStream(f);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.append(User.toString());
 
-            fos =  new FileWriter(filePath);
-            fos.write(User.toString());
+            myOutWriter.close();
 
-
+            fOut.flush();
+            fOut.close();
 
         } catch (JSONException | IOException e) {
             e.printStackTrace();
@@ -234,7 +294,6 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mContentView;
-        //public final TextView mContentTestView;
         public ServicesInfos.ServicesItemInfos mItem;
         public final LinearLayout mLayout;
 
@@ -242,7 +301,6 @@ public class ItemInfosRecyclerViewAdapter extends RecyclerView.Adapter<ItemInfos
             super(view);
             mView = view;
             mContentView = (TextView) view.findViewById(R.id.content);
-            //mContentTestView = (TextView) view.findViewById(R.id.textTest);
             mLayout =(LinearLayout) view.findViewById(R.id.linearlayout);
         }
 
